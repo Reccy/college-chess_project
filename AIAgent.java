@@ -1,36 +1,43 @@
 import java.util.*;
 
-public class AIAgent{
-  private Random rand;
+class AIAgent {
+    private Random rand;
 
-  AIAgent(){
-    rand = new Random();
-  }
-
-/**
-  The method randomMove takes as input a stack of potential moves that the AI agent
-  can make. The agent uses a random number generator to randomly select a move from
-  the inputted Stack and returns this to the calling agent.
-*/
-  Move randomMove(Stack possibilities){
-    int moveID = rand.nextInt(possibilities.size());
-    System.out.println("Agent randomly selected move : "+moveID);
-    for(int i=1;i < (possibilities.size()-(moveID));i++){
-      possibilities.pop();
+    AIAgent() {
+        rand = new Random();
     }
 
-    return (Move)possibilities.pop();
-  }
+    /**
+     * The method randomMove takes as input a stack of potential moves that the AI agent
+     * can make. The agent uses a random number generator to randomly select a move from
+     * the inputted Stack and returns this to the calling agent.
+     */
+    Move randomMove(Stack<Move> possibilities) {
+        int moveID = rand.nextInt(possibilities.size());
+        System.out.println("Agent randomly selected move : " + moveID);
+        for (int i = 1; i < (possibilities.size() - (moveID)); i++) {
+            possibilities.pop();
+        }
 
-  public Move nextBestMove(Stack possibilities){
-    // TODO: Implement twoLevelsDeep
+        return possibilities.pop();
+    }
 
-    return new Move();
-  }
+    Move nextBestMove(Stack<Move> possibilities, ChessProject chessProject) {
 
-  public Move twoLevelsDeep(Stack possibilities){
-    // TODO: Implement twoLevelsDeep
+        for (Move move : possibilities) {
+            // Will aggressively take a piece if it can
+            if (chessProject.piecePresent(move.getLanding()) && chessProject.checkBlackOpponent(move.getLanding().getPosX(), move.getLanding().getPosY())) {
+                System.out.println("Agent selected attack move: " + move.getLanding());
+                return move;
+            }
+        }
 
-    return new Move();
-  }
+        return randomMove(possibilities);
+    }
+
+    Move twoLevelsDeep(Stack<Move> possibilities) {
+        // TODO: Implement twoLevelsDeep
+
+        return new Move();
+    }
 }

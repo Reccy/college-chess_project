@@ -12,7 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 
 public class ChessProject extends JFrame implements MouseListener, MouseMotionListener {
+
     //region Class Member Declarations
+
     private JLayeredPane layeredPane;
     private JPanel chessBoard;
     private JLabel chessPiece;
@@ -30,10 +32,11 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
     private int moveCounter;
     private AIAgent agent;
     private Boolean agentWins;
-    private Stack temporary;
+
     //endregion
 
     //region Constructor
+
     private ChessProject() {
         Dimension boardSize = new Dimension(600, 600);
 
@@ -126,8 +129,8 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
         whiteToMove = true;
         agent = new AIAgent();
         agentWins = false;
-        temporary = new Stack();
     }
+
     //endregion
 
     //region Main
@@ -136,16 +139,16 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
         Main method that gets the ball moving.
     */
     public static void main(String[] args) {
-        ChessProject frame = new ChessProject();
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.pack();
-        frame.setResizable(true);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        ChessProject chessProject = new ChessProject();
+        chessProject.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        chessProject.pack();
+        chessProject.setResizable(true);
+        chessProject.setLocationRelativeTo(null);
+        chessProject.setVisible(true);
         Object[] options = {"Random Moves", "Best Next Move", "Based on Opponents Moves"};
-        int n = JOptionPane.showOptionDialog(frame, "Lets play some Chess, choose your AI opponent", "Introduction to AI Continuous Assessment", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+        int n = JOptionPane.showOptionDialog(chessProject, "Lets play some Chess, choose your AI opponent", "Introduction to AI Continuous Assessment", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
         System.out.println("The selected variable is : " + n);
-        frame.makeAIMove();
+        chessProject.makeAIMove();
     }
 
     //endregion
@@ -814,22 +817,28 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
     //region AI Input
 
+
     /**
-     When the AI Agent decides on a move, a red border shows the square from where the move started and the
-     landing square of the move.
+     * Makes the AI player move their piece
      */
     private void makeAIMove() {
+
+        /*
+            When the AI Agent decides on a move, a red border shows the square from where the move started and the
+            landing square of the move.
+        */
+
         resetBorders();
         layeredPane.validate();
         layeredPane.repaint();
         Stack white = findWhitePieces();
         Stack<Move> completeMoves = new Stack<>();
         Move tempMove;
+
         while (!white.empty()) {
             Square s = (Square) white.pop();
             String tempString = s.getName();
             Stack tmpMoves = new Stack();
-            Stack temporary = new Stack();
             /*
               We need to identify all the possible moves that can be made by the AI Opponent
             */
@@ -851,7 +860,8 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
                 completeMoves.push(tempMove);
             }
         }
-        temporary = (Stack) completeMoves.clone();
+
+        Stack<Move> temporary = (Stack) completeMoves.clone();
         getLandingSquares(temporary);
         printStack(temporary);
 
@@ -864,7 +874,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
               In Chess if you cannot make a valid move but you are not in Check this state is referred to as a Stale Mate
             */
 
-            JOptionPane.showMessageDialog(null, "Cogratulations, you have placed the AI component in a Stale Mate Position");
+            JOptionPane.showMessageDialog(null, "Congratulations, you have placed the AI component in a Stale Mate Position");
             System.exit(0);
 
         } else {

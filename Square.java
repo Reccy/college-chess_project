@@ -26,4 +26,8 @@ class Square{
   String getName(){
       return pieceName;
   }
+
+  void print() {
+      System.out.println("pieceName: " + pieceName + ", x: " + posX + ", y: " + posY);
+  }
 }

@@ -250,7 +250,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
           /*
             The Bishop is a simple piece and has a very long range so usually is used to attack from far away.
             It moves along the diagonal as long as nothing is in the way to its destination. Like all other Chess
-            pieces it can take its opponent piece but cannot take its own piece.
+            chessSquare it can take its opponent piece but cannot take its own piece.
           */
                 Boolean inTheWay = false;
                 if (((landingX < 0) || (landingX > 7)) || ((landingY < 0) || (landingY > 7))) {
@@ -849,7 +849,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
         resetBorders();
         layeredPane.validate();
         layeredPane.repaint();
-        Stack whitePieces = findWhitePieces();
+        Stack whitePieces = findWhiteSquares();
         Stack<Move> completeMoves = new Stack<>();
         Move tempMove;
 
@@ -927,7 +927,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
                     selectedMove = agent.nextBestMove(completeMoves, this);
                     break;
                 case TWO_LEVELS_DEEP:
-                    selectedMove = agent.twoLevelsDeep(completeMoves);
+                    selectedMove = agent.twoLevelsDeep(completeMoves, this);
                     break;
                 default:
                     selectedMove = agent.randomMove(completeMoves);
@@ -987,7 +987,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
     //endregion
 
-    //region Piece Square Getters
+    //region Piece Move Getters for the AI
 
     /**
      * Method to check where a White Pawn can move to. There are two main conditions here. Either the Pawn is in
@@ -1284,7 +1284,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
     Each of these movements should be catered for. The loop guard is set to incriment up to the maximun number of squares.
     On each iteration of the first loop we are adding the value of i to the current x coordinate.
     We make sure that the new potential square is going to be on the board and if it is we create a new square and a new potential
-    move (originating square, new square).If there are no pieces present on the potential square we simply add it to the Stack
+    move (originating square, new square).If there are no chessSquare present on the potential square we simply add it to the Stack
     of potential moves.
     If there is a piece on the square we need to check if its an opponent piece. If it is an opponent piece its a valid move, but we
     must break out of the loop using the Java break keyword as we can't jump over the piece and search for squares. If its not
@@ -1556,7 +1556,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
         colorSquares(squares);
     }
 
-    //endregion
+    //endregion For the AI
 
     //region Board Rendering Methods
 
@@ -1660,7 +1660,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
     /**
      Method to find all the White Pieces.
      */
-    private Stack findWhitePieces() {
+    Stack<Square> findWhiteSquares() {
         Stack<Square> squares = new Stack<>();
         String icon;
         int x;
@@ -1682,6 +1682,53 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
                 }
             }
         }
+        return squares;
+    }
+
+    /**
+     Method to find all the White Pieces.
+     */
+    Stack<Square> findBlackSquares() {
+        Stack<Square> squares = new Stack<>();
+        String icon;
+        int x;
+        int y;
+        String pieceName;
+        for (int i = 0; i < 600; i += 75) {
+            for (int j = 0; j < 600; j += 75) {
+                y = i / 75;
+                x = j / 75;
+                Component tmp = chessBoard.findComponentAt(j, i);
+                if (tmp instanceof JLabel) {
+                    chessPiece = (JLabel) tmp;
+                    icon = chessPiece.getIcon().toString();
+                    pieceName = icon.substring(0, (icon.length() - 4));
+                    if (pieceName.contains("Black")) {
+                        Square squareTemp = new Square(x, y, pieceName);
+                        squares.push(squareTemp);
+                    }
+                }
+            }
+        }
+        return squares;
+    }
+
+    /**
+     Method to find all pieces.
+     */
+    Stack findAllSquares() {
+        Stack<Square> squares = new Stack<>();
+        Stack<Square> blackSquares = findBlackSquares();
+        Stack<Square> whiteSquares = findWhiteSquares();
+
+        for (Square square : blackSquares) {
+            squares.push(square);
+        }
+
+        for (Square square : whiteSquares) {
+            squares.push(square);
+        }
+
         return squares;
     }
 

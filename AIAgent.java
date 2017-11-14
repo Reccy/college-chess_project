@@ -30,24 +30,35 @@ class AIAgent {
      */
     Move nextBestMove(Stack<Move> possibilities, ChessProject chessProject) {
 
+        // The current best move and evaluated function
+        Move bestMove = new Move();
+        int bestEvaluation = Integer.MIN_VALUE;
+
         // Create data representation of the Chess Project
-        ChessState chessState = new ChessState(chessProject);
+        ChessState initialChessState = new ChessState(chessProject);
 
         // Print the current state
-        System.out.println("Current State:");
-        chessState.printDataRepresentation();
+        initialChessState.printDataRepresentation("Current State");
 
+        // Evaluate each possible move
         for (Move move : possibilities) {
 
-            // Will aggressively take a piece if it can
-            if (chessProject.piecePresent(move.getLanding()) && chessProject.checkBlackOpponent(move.getLanding().getPosX(), move.getLanding().getPosY())) {
-                System.out.println("Agent selected attack move: " + move.getLanding());
-                return move;
+            // Check the next move
+            ChessState nextChessState = new ChessState(initialChessState);
+
+            nextChessState.performMove(move);
+            nextChessState.printDataRepresentation("Next Possible Move");
+
+            // If the next move has a better evaluation result, then set that as the next best move
+            int boardEvaluation = nextChessState.evaluateBoard();
+            if (boardEvaluation > bestEvaluation) {
+                bestMove = move;
+                bestEvaluation = boardEvaluation;
             }
         }
 
-        // Return random move as a fail safe
-        return randomMove(possibilities);
+        // Return best move
+        return bestMove;
     }
 
     /**

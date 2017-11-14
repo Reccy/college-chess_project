@@ -1,11 +1,7 @@
 import java.util.*;
 
 class AIAgent {
-    private Random rand;
-
-    AIAgent() {
-        rand = new Random();
-    }
+    private Random rand = new Random();
 
     /**
      * The method randomMove takes as input a stack of potential moves that the AI agent
@@ -65,8 +61,7 @@ class AIAgent {
     }
 
     /**
-     * The method twoLevelsDeep evaluates the board for the next teo move by using the nextBestMove
-     * method. This checks the AI's next move and the Player's next best move using minmax algorithm.
+     * TODO: Description
      */
     Move twoLevelsDeep(Stack<Move> possibilities, ChessProject chessProject) {
         return nextBestMove(possibilities, chessProject);

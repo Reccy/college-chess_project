@@ -3,6 +3,7 @@ import java.util.Stack;
 public class ChessState {
 
     private Square[][] chessSquare = new Square[8][8];
+    private ChessProject chessProject;
 
     /**
      * Creates a ChessState data representation based off of the input value
@@ -13,6 +14,8 @@ public class ChessState {
                 chessSquare[columns][rows] = inputState.chessSquare[columns][rows];
             }
         }
+
+        chessProject = inputState.chessProject;
     }
 
     /**
@@ -28,6 +31,7 @@ public class ChessState {
             chessSquare[square.getPosX()][square.getPosY()] = square;
         }
 
+        this.chessProject = chessProject;
     }
 
     /**
@@ -124,33 +128,37 @@ public class ChessState {
 
         // Evaluate agent pawn positions
         for (Square pawn : getWhitePawns()) {
-            evaluation += (pawn.getEvaluationValue() + pawn.getPosY() - 1);
+            evaluation += (pawn.getEvaluationValue() + pawn.getPosY() - 1 + chessProject.getPawnMoves(pawn.getPosX(), pawn.getPosY(), pawn.getName()).size());
+
+            for (Move move : chessProject.getPawnMoves(pawn.getPosX(), pawn.getPosY(), pawn.getName())) {
+                if (move.getLanding().getName().contains())
+            }
         }
 
         // Evaluate agent rook positions
         for (Square rook : getWhiteRooks()) {
-            evaluation += (rook.getEvaluationValue() + rook.getPosY());
+            evaluation += (rook.getEvaluationValue() + chessProject.getRookMoves(rook.getPosX(), rook.getPosY(), rook.getName()).size());
         }
 
         // Evaluate agent knight positions
         for (Square knight : getWhiteKnights()) {
-            evaluation += (knight.getEvaluationValue() + knight.getPosY());
+            evaluation += (knight.getEvaluationValue() + chessProject.getKnightMoves(knight.getPosX(), knight.getPosY(), knight.getName()).size());
         }
 
         // Evaluate agent bishop positions
         for (Square bishop : getWhiteBishops()) {
-            evaluation += (bishop.getEvaluationValue() + bishop.getPosY());
+            evaluation += (bishop.getEvaluationValue() + chessProject.getBishopMoves(bishop.getPosX(), bishop.getPosY(), bishop.getName()).size());
         }
 
         // Evaluate agent queen position
         Square whiteQueen = getWhiteQueen();
         if (whiteQueen != null)
-            evaluation += (whiteQueen.getEvaluationValue() + whiteQueen.getPosY());
+            evaluation += (whiteQueen.getEvaluationValue() + chessProject.getQueenMoves(whiteQueen.getPosX(), whiteQueen.getPosY(), whiteQueen.getName()).size());
 
         // Evaluate agent king position
         Square whiteKing = getWhiteKing();
         if (whiteKing != null)
-            evaluation += (whiteKing.getEvaluationValue() + whiteKing.getPosY());
+            evaluation += (whiteKing.getEvaluationValue() - chessProject.getKingMoves(whiteKing.getPosX(), whiteKing.getPosY(), whiteKing.getName()).size());
 
         //endregion
 
@@ -158,33 +166,33 @@ public class ChessState {
 
         // Evaluate player pawn positions
         for (Square pawn : getBlackPawns()) {
-            evaluation -= (pawn.getEvaluationValue() + Math.abs(pawn.getPosY() - 6));
+            evaluation -= (pawn.getEvaluationValue() + Math.abs(pawn.getPosY() - 6) + chessProject.getPawnMoves(pawn.getPosX(), pawn.getPosY(), pawn.getName()).size());
         }
 
         // Evaluate player rook positions
         for (Square rook : getBlackRooks()) {
-            evaluation -= (rook.getEvaluationValue() + Math.abs(rook.getPosY() - 7));
+            evaluation -= (rook.getEvaluationValue() + chessProject.getRookMoves(rook.getPosX(), rook.getPosY(), rook.getName()).size());
         }
 
         // Evaluate player knight positions
-        for (Square rook : getBlackKnights()) {
-            evaluation -= (rook.getEvaluationValue() + Math.abs(rook.getPosY() - 7));
+        for (Square knight : getBlackKnights()) {
+            evaluation -= (knight.getEvaluationValue() + chessProject.getKnightMoves(knight.getPosX(), knight.getPosY(), knight.getName()).size());
         }
 
         // Evaluate player bishop positions
         for (Square bishop : getBlackBishops()) {
-            evaluation -= (bishop.getEvaluationValue() + Math.abs(bishop.getPosY() - 7));
+            evaluation -= (bishop.getEvaluationValue() + chessProject.getBishopMoves(bishop.getPosX(), bishop.getPosY(), bishop.getName()).size());
         }
 
         // Evaluate player queen position
         Square blackQueen = getBlackQueen();
         if (blackQueen != null)
-            evaluation -= (blackQueen.getEvaluationValue() + Math.abs(blackQueen.getPosY() - 7));
+            evaluation -= (blackQueen.getEvaluationValue() + chessProject.getQueenMoves(blackQueen.getPosX(), blackQueen.getPosY(), blackQueen.getName()).size());
 
         // Evaluate player king position
         Square blackKing = getBlackKing();
         if (blackKing != null)
-            evaluation -= (blackKing.getEvaluationValue() + Math.abs(blackKing.getPosY() - 7));
+            evaluation -= (blackKing.getEvaluationValue() - chessProject.getKingMoves(blackKing.getPosX(), blackKing.getPosY(), blackKing.getName()).size());
 
         //endregion
 

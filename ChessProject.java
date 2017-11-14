@@ -996,7 +996,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
      * bottom of the board it turns into a Queen (this should be handled where the move is actually being made and not in this
      * method).
      */
-    private Stack getPawnMoves(int x, int y, String piece) {
+    Stack<Move> getPawnMoves(int x, int y, String piece) {
         Square startingSquare = new Square(x ,y ,piece);
         Square downOneSquare = new Square(x, y + 1, piece);
         Square downTwoSquare = new Square(x, y + 2, piece);
@@ -1005,8 +1005,6 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
         Stack<Move> moves = new Stack<>();
         boolean isStartingPosition = (startingSquare.getPosY() == 1);
-
-        System.out.println("In Starting Position, (" + x + ", " + y + ", " + piece + ") - " + isStartingPosition);
 
         // Check squares below
         if(!piecePresent(downOneSquare)) {
@@ -1060,7 +1058,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
      * going to be placing the piece back on the board, if we are not taking our own piece and if the resulting landing square
      * is not adjacent to the enemy King.
      */
-    private Stack getKingMoves(int x, int y, String piece) {
+    Stack getKingMoves(int x, int y, String piece) {
         Square startingSquare = new Square(x, y, piece);
         Stack<Move> moves = new Stack<>();
         Move validMove1, validMove2, validMove3;
@@ -1217,7 +1215,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
     /**
      Method to return all the possible moves that a Queen can make
      */
-    private Stack getQueenMoves(int x, int y, String piece) {
+    Stack getQueenMoves(int x, int y, String piece) {
         Stack completeMoves = new Stack();
         Stack tmpMoves = new Stack();
         Move tmp;
@@ -1270,7 +1268,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
      _|_____________|___________|_________|___________|___________|_
      |             |           |         |           |           |
      */
-    private Stack getRookMoves(int x, int y, String piece) {
+    Stack getRookMoves(int x, int y, String piece) {
         Square startingSquare = new Square(x, y, piece);
         Stack<Move> moves = new Stack<>();
         Move validM, validM2, validM3, validM4;
@@ -1400,7 +1398,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
      |             |           |         |           |           |
 
      */
-    private Stack getBishopMoves(int x, int y, String piece) {
+    Stack getBishopMoves(int x, int y, String piece) {
         Square startingSquare = new Square(x, y, piece);
         Stack<Move> moves = new Stack<>();
         Move validM, validM2, validM3, validM4;
@@ -1501,7 +1499,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
      to get possible movements from. The Knight can essentially move in an L direction from any square on the
      board as long as the landing square is on the board and we can take an opponents piece but not our own piece.
      */
-    private Stack getKnightMoves(int x, int y, String piece) {
+    Stack getKnightMoves(int x, int y, String piece) {
         Square startingSquare = new Square(x, y, piece);
         Stack<Square> squares = new Stack<>();
         Stack<Move> attackingMove = new Stack<>();

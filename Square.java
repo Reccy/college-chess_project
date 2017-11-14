@@ -27,6 +27,26 @@ class Square{
       return pieceName;
   }
 
+  int getEvaluationValue() {
+
+      if (pieceName.contains("Pawn")) {
+          return 1;
+      } else if (pieceName.contains("Knight")) {
+          return 3;
+      } else if (pieceName.contains("Rook")) {
+          return 5;
+      } else if (pieceName.contains("Bishop")) {
+          return 5;
+      } else if (pieceName.contains("Queen")) {
+          return 8;
+      } else if (pieceName.contains("King")) {
+          return 100;
+      }
+
+      // Return 0 if null piece
+      return 0;
+  }
+
   void print() {
       System.out.println("pieceName: " + pieceName + ", x: " + posX + ", y: " + posY);
   }

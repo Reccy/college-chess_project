@@ -68,14 +68,4 @@ class AIAgent {
     Move twoLevelsDeep(Stack<Move> possibilities, ChessProject chessProject) {
         return nextBestMove(possibilities, chessProject);
     }
-
-    /**
-     * Evaluates the advantage of the AI agent depending on the white and black piece values.
-     * The higher the value, the better the AI advantage
-     * @param chessProject Instance of the Chess Project
-     * @return The AI Agent's advantage
-     */
-    float evaluateChessBoard(ChessProject chessProject) {
-        return rand.nextInt(100);
-    }
 }

@@ -50,7 +50,7 @@ public class ChessState {
         if (title.length() > 0)
             System.out.println(title);
 
-        System.out.println("EVAL: " + evaluateBoard());
+        System.out.println("AGENT ADVANTAGE: " + evaluateBoard());
         System.out.println("=========================");
         System.out.println("   0  1  2  3  4  5  6  7");
         System.out.println("0 |" + getSquarePieceChar(0,0) + "|" + getSquarePieceChar(1,0) + "|" + getSquarePieceChar(2,0) + "|" + getSquarePieceChar(3,0) + "|" + getSquarePieceChar(4,0) + "|" + getSquarePieceChar(5,0) + "|" + getSquarePieceChar(6,0) + "|" + getSquarePieceChar(7,0) + "|");
@@ -114,59 +114,293 @@ public class ChessState {
     }
 
     /**
-     * TODO: Create evaluation function
+     * Evaluates the board to see what the agent's advantage is.
+     * The higher the number, the higher the agent's advantage.
      */
-    public int evaluateBoard() {
+    int evaluateBoard() {
         int evaluation = 0;
+
+        //region agent eval
 
         // Evaluate agent pawn positions
         for (Square pawn : getWhitePawns()) {
-            evaluation += pawn.getPosY();
+            evaluation += (pawn.getEvaluationValue() + pawn.getPosY() - 1);
         }
+
+        // Evaluate agent rook positions
+        for (Square rook : getWhiteRooks()) {
+            evaluation += (rook.getEvaluationValue() + rook.getPosY());
+        }
+
+        // Evaluate agent knight positions
+        for (Square knight : getWhiteKnights()) {
+            evaluation += (knight.getEvaluationValue() + knight.getPosY());
+        }
+
+        // Evaluate agent bishop positions
+        for (Square bishop : getWhiteBishops()) {
+            evaluation += (bishop.getEvaluationValue() + bishop.getPosY());
+        }
+
+        // Evaluate agent queen position
+        Square whiteQueen = getWhiteQueen();
+        if (whiteQueen != null)
+            evaluation += (whiteQueen.getEvaluationValue() + whiteQueen.getPosY());
+
+        // Evaluate agent king position
+        Square whiteKing = getWhiteKing();
+        if (whiteKing != null)
+            evaluation += (whiteKing.getEvaluationValue() + whiteKing.getPosY());
+
+        //endregion
+
+        //region player eval
 
         // Evaluate player pawn positions
         for (Square pawn : getBlackPawns()) {
-            evaluation -= pawn.getPosY();
+            evaluation -= (pawn.getEvaluationValue() + Math.abs(pawn.getPosY() - 6));
         }
+
+        // Evaluate player rook positions
+        for (Square rook : getBlackRooks()) {
+            evaluation -= (rook.getEvaluationValue() + Math.abs(rook.getPosY() - 7));
+        }
+
+        // Evaluate player knight positions
+        for (Square rook : getBlackKnights()) {
+            evaluation -= (rook.getEvaluationValue() + Math.abs(rook.getPosY() - 7));
+        }
+
+        // Evaluate player bishop positions
+        for (Square bishop : getBlackBishops()) {
+            evaluation -= (bishop.getEvaluationValue() + Math.abs(bishop.getPosY() - 7));
+        }
+
+        // Evaluate player queen position
+        Square blackQueen = getBlackQueen();
+        if (blackQueen != null)
+            evaluation -= (blackQueen.getEvaluationValue() + Math.abs(blackQueen.getPosY() - 7));
+
+        // Evaluate player king position
+        Square blackKing = getBlackKing();
+        if (blackKing != null)
+            evaluation -= (blackKing.getEvaluationValue() + Math.abs(blackKing.getPosY() - 7));
+
+        //endregion
 
         return evaluation;
     }
 
     //region Piece Finders
 
+    //region Pawns
     /**
      * Returns all of the white pawn squares
      */
     private Stack<Square> getWhitePawns() {
-        Stack<Square> pawns = new Stack<>();
+        Stack<Square> pieces = new Stack<>();
 
         for (int rows = 0; rows < 8; rows++) {
             for (int columns = 0; columns < 8; columns++) {
                 if(chessSquare[columns][rows].getName().contains("WhitePawn")) {
-                    pawns.push(chessSquare[columns][rows]);
+                    pieces.push(chessSquare[columns][rows]);
                 }
             }
         }
 
-        return pawns;
+        return pieces;
     }
 
     /**
      * Returns all of the black pawn squares
      */
     private Stack<Square> getBlackPawns() {
-        Stack<Square> pawns = new Stack<>();
+        Stack<Square> pieces = new Stack<>();
 
         for (int rows = 0; rows < 8; rows++) {
             for (int columns = 0; columns < 8; columns++) {
                 if(chessSquare[columns][rows].getName().contains("BlackPawn")) {
-                    pawns.push(chessSquare[columns][rows]);
+                    pieces.push(chessSquare[columns][rows]);
                 }
             }
         }
 
-        return pawns;
+        return pieces;
     }
+
+    //endregion
+
+    //region Rooks
+    /**
+     * Returns all of the white rook squares
+     */
+    private Stack<Square> getWhiteRooks() {
+        Stack<Square> pieces = new Stack<>();
+
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("WhiteRook")) {
+                    pieces.push(chessSquare[columns][rows]);
+                }
+            }
+        }
+
+        return pieces;
+    }
+
+    /**
+     * Returns all of the black rook squares
+     */
+    private Stack<Square> getBlackRooks() {
+        Stack<Square> pieces = new Stack<>();
+
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("BlackRook")) {
+                    pieces.push(chessSquare[columns][rows]);
+                }
+            }
+        }
+
+        return pieces;
+    }
+    //endregion
+
+    //region Knights
+    /**
+     * Returns all of the white knight squares
+     */
+    private Stack<Square> getWhiteKnights() {
+        Stack<Square> pieces = new Stack<>();
+
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("WhiteKnight")) {
+                    pieces.push(chessSquare[columns][rows]);
+                }
+            }
+        }
+
+        return pieces;
+    }
+
+    /**
+     * Returns all of the black knight squares
+     */
+    private Stack<Square> getBlackKnights() {
+        Stack<Square> pieces = new Stack<>();
+
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("BlackKnight")) {
+                    pieces.push(chessSquare[columns][rows]);
+                }
+            }
+        }
+
+        return pieces;
+    }
+    //endregion
+
+    //region Bishops
+    /**
+     * Returns all of the black knight squares
+     */
+    private Stack<Square> getWhiteBishops() {
+        Stack<Square> pieces = new Stack<>();
+
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("WhiteBishop")) {
+                    pieces.push(chessSquare[columns][rows]);
+                }
+            }
+        }
+
+        return pieces;
+    }
+
+    /**
+     * Returns all of the white bishop squares
+     */
+    private Stack<Square> getBlackBishops() {
+        Stack<Square> pieces = new Stack<>();
+
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("BlackBishop")) {
+                    pieces.push(chessSquare[columns][rows]);
+                }
+            }
+        }
+
+        return pieces;
+    }
+    //endregion
+
+    //region Queens
+    /**
+     * Returns the white queen
+     */
+    private Square getWhiteQueen() {
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("WhiteQueen")) {
+                    return chessSquare[columns][rows];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the black queen
+     */
+    private Square getBlackQueen() {
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("BlackQueen")) {
+                    return chessSquare[columns][rows];
+                }
+            }
+        }
+
+        return null;
+    }
+    //endregion
+
+    //region Kings
+    /**
+     * Returns the white king
+     */
+    private Square getWhiteKing() {
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("WhiteKing")) {
+                    return chessSquare[columns][rows];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the black king
+     */
+    private Square getBlackKing() {
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("BlackKing")) {
+                    return chessSquare[columns][rows];
+                }
+            }
+        }
+
+        return null;
+    }
+    //endregion
 
     //endregion
 }

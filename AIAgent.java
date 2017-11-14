@@ -31,7 +31,7 @@ class AIAgent {
     Move nextBestMove(Stack<Move> possibilities, ChessProject chessProject) {
 
         // The current best move and evaluated function
-        Move bestMove = new Move();
+        ArrayList<Move> bestMove = new ArrayList<>();
         int bestEvaluation = Integer.MIN_VALUE;
 
         // Create data representation of the Chess Project
@@ -51,14 +51,17 @@ class AIAgent {
 
             // If the next move has a better evaluation result, then set that as the next best move
             int boardEvaluation = nextChessState.evaluateBoard();
-            if (boardEvaluation > bestEvaluation) {
-                bestMove = move;
+            if (boardEvaluation == bestEvaluation) {
+                bestMove.add(move);
+            } else if (boardEvaluation > bestEvaluation) {
+                bestMove.clear();
+                bestMove.add(move);
                 bestEvaluation = boardEvaluation;
             }
         }
 
-        // Return best move
-        return bestMove;
+        // Return random best move
+        return bestMove.get(rand.nextInt(Math.max(bestMove.size() - 1, 1)));
     }
 
     /**

@@ -129,10 +129,6 @@ public class ChessState {
         // Evaluate agent pawn positions
         for (Square pawn : getWhitePawns()) {
             evaluation += (pawn.getEvaluationValue() + pawn.getPosY() - 1 + chessProject.getPawnMoves(pawn.getPosX(), pawn.getPosY(), pawn.getName()).size());
-
-            for (Move move : chessProject.getPawnMoves(pawn.getPosX(), pawn.getPosY(), pawn.getName())) {
-                if (move.getLanding().getName().contains())
-            }
         }
 
         // Evaluate agent rook positions

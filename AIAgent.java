@@ -57,7 +57,7 @@ class AIAgent {
         }
 
         // Return random best move
-        return bestMove.get(rand.nextInt(Math.max(bestMove.size() - 1, 1)));
+        return bestMove.get(rand.nextInt(Math.max(bestMove.size(), 1)));
     }
 
     /**

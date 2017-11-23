@@ -865,7 +865,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
             } else if (pieceName.contains("Bishop")) {
                 pieceMoves = getBishopMoves(pieceSquare.getPosX(), pieceSquare.getPosY(), pieceSquare.getName());
             } else if (pieceName.contains("Pawn")) {
-                pieceMoves = getPawnMoves(pieceSquare.getPosX(), pieceSquare.getPosY(), pieceSquare.getName());
+                pieceMoves = getWhitePawnMoves(pieceSquare.getPosX(), pieceSquare.getPosY(), pieceSquare.getName());
             } else if (pieceName.contains("Rook")) {
                 pieceMoves = getRookMoves(pieceSquare.getPosX(), pieceSquare.getPosY(), pieceSquare.getName());
             } else if (pieceName.contains("Queen")) {
@@ -996,12 +996,44 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
      * bottom of the board it turns into a Queen (this should be handled where the move is actually being made and not in this
      * method).
      */
-    Stack<Move> getPawnMoves(int x, int y, String piece) {
+    Stack<Move> getWhitePawnMoves(int x, int y, String piece) {
         Square startingSquare = new Square(x ,y ,piece);
         Square downOneSquare = new Square(x, y + 1, piece);
         Square downTwoSquare = new Square(x, y + 2, piece);
         Square leftDiagonalSquare = new Square(x - 1, y + 1, piece);
         Square rightDiagonalSquare = new Square(x + 1, y + 1, piece);
+
+        Stack<Move> moves = new Stack<>();
+        boolean isStartingPosition = (startingSquare.getPosY() == 1);
+
+        // Check squares below
+        if(!piecePresent(downOneSquare)) {
+            moves.push(new Move(startingSquare, downOneSquare));
+
+            if(isStartingPosition && !piecePresent(downTwoSquare)) {
+                moves.push(new Move(startingSquare, downTwoSquare));
+            }
+        }
+
+        // Check left diagonal square for opponent
+        if(leftDiagonalSquare.getPosX() >= 0 && piecePresent(leftDiagonalSquare) && checkWhiteOpponent(((leftDiagonalSquare.getPosX() * 75) + 20), ((leftDiagonalSquare.getPosY() * 75) + 20))) {
+            moves.push(new Move(startingSquare, leftDiagonalSquare));
+        }
+
+        // Check right diagonal square for opponent
+        if(rightDiagonalSquare.getPosX() <= 7 && piecePresent(rightDiagonalSquare) && checkWhiteOpponent(((rightDiagonalSquare.getPosX() * 75) + 20), ((rightDiagonalSquare.getPosY() * 75) + 20))) {
+            moves.push(new Move(startingSquare, rightDiagonalSquare));
+        }
+
+        return moves;
+    }
+
+    Stack<Move> getBlackPawnMoves(int x, int y, String piece) {
+        Square startingSquare = new Square(x ,y ,piece);
+        Square downOneSquare = new Square(x, y - 1, piece);
+        Square downTwoSquare = new Square(x, y - 2, piece);
+        Square leftDiagonalSquare = new Square(x - 1, y - 1, piece);
+        Square rightDiagonalSquare = new Square(x + 1, y - 1, piece);
 
         Stack<Move> moves = new Stack<>();
         boolean isStartingPosition = (startingSquare.getPosY() == 1);

@@ -128,33 +128,33 @@ public class ChessState {
 
         // Evaluate agent pawn positions
         for (Square pawn : getWhitePawns()) {
-            Stack<Move> availableMoves = chessProject.getPawnMoves(pawn.getPosX(), pawn.getPosY(), pawn.getName());
-            evaluation += (pawn.getEvaluationValue() + pawn.getPosY() - 1 + availableMoves.size() + getAttackAdvantage(availableMoves, pawn.getName())) * getUnderAttackMultiplier(pawn);
+            Stack<Move> availableMoves = chessProject.getWhitePawnMoves(pawn.getPosX(), pawn.getPosY(), pawn.getName());
+            evaluation += (pawn.getEvaluationValue() + pawn.getPosY() - 1 + availableMoves.size() + getAttackAdvantage(availableMoves, pawn.getName())) * getUnderAttackMultiplierWhitePieces(pawn);
         }
 
         // Evaluate agent rook positions
         for (Square rook : getWhiteRooks()) {
             Stack<Move> availableMoves = chessProject.getRookMoves(rook.getPosX(), rook.getPosY(), rook.getName());
-            evaluation += (rook.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, rook.getName())) * getUnderAttackMultiplier(rook);
+            evaluation += (rook.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, rook.getName())) * getUnderAttackMultiplierWhitePieces(rook);
         }
 
         // Evaluate agent knight positions
         for (Square knight : getWhiteKnights()) {
             Stack<Move> availableMoves = chessProject.getKnightMoves(knight.getPosX(), knight.getPosY(), knight.getName());
-            evaluation += (knight.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, knight.getName())) * getUnderAttackMultiplier(knight);
+            evaluation += (knight.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, knight.getName())) * getUnderAttackMultiplierWhitePieces(knight);
         }
 
         // Evaluate agent bishop positions
         for (Square bishop : getWhiteBishops()) {
             Stack<Move> availableMoves = chessProject.getBishopMoves(bishop.getPosX(), bishop.getPosY(), bishop.getName());
-            evaluation += (bishop.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, bishop.getName())) * getUnderAttackMultiplier(bishop);
+            evaluation += (bishop.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, bishop.getName())) * getUnderAttackMultiplierWhitePieces(bishop);
         }
 
         // Evaluate agent queen position
         Square whiteQueen = getWhiteQueen();
         if (whiteQueen != null) {
             Stack<Move> availableMoves = chessProject.getQueenMoves(whiteQueen.getPosX(), whiteQueen.getPosY(), whiteQueen.getName());
-            evaluation += (whiteQueen.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, whiteQueen.getName()))  * getUnderAttackMultiplier(whiteQueen);
+            evaluation += (whiteQueen.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, whiteQueen.getName()))  * getUnderAttackMultiplierWhitePieces(whiteQueen);
         }
 
         // Evaluate agent king position (Subtract available moves because the king is a defensive piece)
@@ -162,7 +162,7 @@ public class ChessState {
         if (whiteKing != null)
         {
             Stack<Move> availableMoves = chessProject.getKingMoves(whiteKing.getPosX(), whiteKing.getPosY(), whiteKing.getName());
-            evaluation += (whiteKing.getEvaluationValue() - availableMoves.size() + getAttackAdvantage(availableMoves, whiteKing.getName()))  * getUnderAttackMultiplier(whiteKing);
+            evaluation += (whiteKing.getEvaluationValue() - availableMoves.size() - getAttackAdvantage(availableMoves, whiteKing.getName()))  * getUnderAttackMultiplierWhitePieces(whiteKing);
         }
 
         //endregion
@@ -171,26 +171,26 @@ public class ChessState {
 
         // Evaluate player pawn positions
         for (Square pawn : getBlackPawns()) {
-            Stack<Move> availableMoves = chessProject.getPawnMoves(pawn.getPosX(), pawn.getPosY(), pawn.getName());
-            evaluation -= (pawn.getEvaluationValue() + Math.abs(pawn.getPosY() - 6) + availableMoves.size() + getAttackAdvantage(availableMoves, pawn.getName()))  * getUnderAttackMultiplier(pawn);
+            Stack<Move> availableMoves = chessProject.getWhitePawnMoves(pawn.getPosX(), pawn.getPosY(), pawn.getName());
+            evaluation -= (pawn.getEvaluationValue() + Math.abs(pawn.getPosY() - 6) + availableMoves.size() + getAttackAdvantage(availableMoves, pawn.getName()))  * getUnderAttackMultiplierBlackPieces(pawn);
         }
 
         // Evaluate player rook positions
         for (Square rook : getBlackRooks()) {
             Stack<Move> availableMoves = chessProject.getRookMoves(rook.getPosX(), rook.getPosY(), rook.getName());
-            evaluation -= (rook.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, rook.getName())) * getUnderAttackMultiplier(rook);
+            evaluation -= (rook.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, rook.getName())) * getUnderAttackMultiplierBlackPieces(rook);
         }
 
         // Evaluate player knight positions
         for (Square knight : getBlackKnights()) {
             Stack<Move> availableMoves = chessProject.getKnightMoves(knight.getPosX(), knight.getPosY(), knight.getName());
-            evaluation -= (knight.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, knight.getName())) * getUnderAttackMultiplier(knight);
+            evaluation -= (knight.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, knight.getName())) * getUnderAttackMultiplierBlackPieces(knight);
         }
 
         // Evaluate player bishop positions
         for (Square bishop : getBlackBishops()) {
             Stack<Move> availableMoves = chessProject.getBishopMoves(bishop.getPosX(), bishop.getPosY(), bishop.getName());
-            evaluation -= (bishop.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, bishop.getName())) * getUnderAttackMultiplier(bishop);
+            evaluation -= (bishop.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, bishop.getName())) * getUnderAttackMultiplierBlackPieces(bishop);
         }
 
         // Evaluate player queen position
@@ -198,7 +198,7 @@ public class ChessState {
         if (blackQueen != null)
         {
             Stack<Move> availableMoves = chessProject.getQueenMoves(blackQueen.getPosX(), blackQueen.getPosY(), blackQueen.getName());
-            evaluation -= (blackQueen.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, blackQueen.getName())) * getUnderAttackMultiplier(blackQueen);
+            evaluation -= (blackQueen.getEvaluationValue() + availableMoves.size() + getAttackAdvantage(availableMoves, blackQueen.getName())) * getUnderAttackMultiplierBlackPieces(blackQueen);
         }
 
         // Evaluate player king position (Subtract available moves because the king is a defensive piece)
@@ -206,7 +206,7 @@ public class ChessState {
         if (blackKing != null)
         {
             Stack<Move> availableMoves = chessProject.getKingMoves(blackKing.getPosX(), blackKing.getPosY(), blackKing.getName());
-            evaluation -= (blackKing.getEvaluationValue() - availableMoves.size() + getAttackAdvantage(availableMoves, blackKing.getName())) * getUnderAttackMultiplier(blackKing);
+            evaluation -= (blackKing.getEvaluationValue() - availableMoves.size() - getAttackAdvantage(availableMoves, blackKing.getName())) * getUnderAttackMultiplierBlackPieces(blackKing);
         }
 
         //endregion
@@ -247,11 +247,149 @@ public class ChessState {
      * Returns 1 if the piece is under attack.
      * Returns 0 if the piece is not under attack.
      */
-    private int getUnderAttackMultiplier(Square piece) {
-        return 1;
+    private int getUnderAttackMultiplierBlackPieces(Square piece) {
+        Stack<Move> opponentMoves = getWhiteMoves();
+        int agentPosX = piece.getPosX();
+        int agentPosY = piece.getPosY();
+        String agentName = piece.getName();
+
+        for (Move opponentMove : opponentMoves) {
+            int opponentLandingX = opponentMove.getLanding().getPosX();
+            int opponentLandingY = opponentMove.getLanding().getPosY();
+
+            if ((agentName.contains("White")) && (opponentLandingX == agentPosX && opponentLandingY == agentPosY)) {
+                System.out.println("BLACK PIECE UNDER ATTACK: " + agentPosX + ", " + agentPosY + " => " + piece.getName());
+                return 1;
+            }
+        }
+
+        return 0;
     }
 
+    /**
+     * Returns 1 if the piece is under attack.
+     * Returns 0 if the piece is not under attack.
+     */
+    private int getUnderAttackMultiplierWhitePieces(Square piece) {
+        Stack<Move> opponentMoves = getBlackMoves();
+        int agentPosX = piece.getPosX();
+        int agentPosY = piece.getPosY();
+        String agentName = piece.getName();
+
+        for (Move opponentMove : opponentMoves) {
+            int opponentLandingX = opponentMove.getLanding().getPosX();
+            int opponentLandingY = opponentMove.getLanding().getPosY();
+
+            if ((agentName.contains("Black")) && (opponentLandingX == agentPosX && opponentLandingY == agentPosY)) {
+                System.out.println("WHITE PIECE UNDER ATTACK: " + agentPosX + ", " + agentPosY + " => " + piece.getName());
+                return 1;
+            }
+        }
+
+        return 0;
+    }
+
+    //region Move Finders
+    private Stack<Move> getBlackMoves() {
+        Stack<Square> blackSquares = getBlackSquares();
+        Stack<Move> blackMoves = new Stack<>();
+
+        for (Square blackSquare : blackSquares) {
+            int squarePosX = blackSquare.getPosX();
+            int squarePosY = blackSquare.getPosY();
+            String squareName = blackSquare.getName();
+
+            if (blackSquare.getName().contains("BlackPawn")) {
+                blackMoves.addAll(getPawnMoves(squarePosX, squarePosY, squareName));
+
+            } else if (blackSquare.getName().contains("BlackKnight")) {
+                blackMoves.addAll(getKnightMoves(squarePosX, squarePosY, squareName));
+
+            } else if (blackSquare.getName().contains("BlackRook")) {
+                blackMoves.addAll(getRookMoves(squarePosX, squarePosY, squareName));
+
+            } else if (blackSquare.getName().contains("BlackBishop")) {
+                blackMoves.addAll(getBishopMoves(squarePosX, squarePosY, squareName));
+
+            } else if (blackSquare.getName().contains("BlackQueen")) {
+                blackMoves.addAll(getQueenMoves(squarePosX, squarePosY, squareName));
+
+            } else if (blackSquare.getName().contains("BlackKing")) {
+                blackMoves.addAll(getKingMoves(squarePosX, squarePosY, squareName));
+
+            }
+        }
+
+        return blackMoves;
+    }
+
+    private Stack<Move> getWhiteMoves() {
+        Stack<Square> whiteSquares = getWhiteSquares();
+        Stack<Move> whiteMoves = new Stack<>();
+
+        for (Square whiteSquare : whiteSquares) {
+            int squarePosX = whiteSquare.getPosX();
+            int squarePosY = whiteSquare.getPosY();
+            String squareName = whiteSquare.getName();
+
+            if (whiteSquare.getName().contains("WhitePawn")) {
+                whiteMoves.addAll(getPawnMoves(squarePosX, squarePosY, squareName));
+
+            } else if (whiteSquare.getName().contains("WhiteKnight")) {
+                whiteMoves.addAll(getKnightMoves(squarePosX, squarePosY, squareName));
+
+            } else if (whiteSquare.getName().contains("WhiteRook")) {
+                whiteMoves.addAll(getRookMoves(squarePosX, squarePosY, squareName));
+
+            } else if (whiteSquare.getName().contains("WhiteBishop")) {
+                whiteMoves.addAll(getBishopMoves(squarePosX, squarePosY, squareName));
+
+            } else if (whiteSquare.getName().contains("WhiteQueen")) {
+                whiteMoves.addAll(getQueenMoves(squarePosX, squarePosY, squareName));
+
+            } else if (whiteSquare.getName().contains("WhiteKing")) {
+                whiteMoves.addAll(getKingMoves(squarePosX, squarePosY, squareName));
+
+            }
+        }
+
+        return whiteMoves;
+    }
+
+
+    //endregion
+
     //region Piece Finders
+
+    //region All Pieces
+    private Stack<Square> getBlackSquares() {
+        Stack<Square> pieces = new Stack<>();
+
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("Black")) {
+                    pieces.push(chessSquare[columns][rows]);
+                }
+            }
+        }
+
+        return pieces;
+    }
+
+    private Stack<Square> getWhiteSquares() {
+        Stack<Square> pieces = new Stack<>();
+
+        for (int rows = 0; rows < 8; rows++) {
+            for (int columns = 0; columns < 8; columns++) {
+                if(chessSquare[columns][rows].getName().contains("White")) {
+                    pieces.push(chessSquare[columns][rows]);
+                }
+            }
+        }
+
+        return pieces;
+    }
+    //endregion
 
     //region Pawns
     /**

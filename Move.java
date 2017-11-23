@@ -11,6 +11,11 @@ class Move{
     
   }
 
+  @Override
+  public String toString() {
+    return "MOVE FROM: [" + start.toString() + "], TO: [" + landing.toString() + "]";
+  }
+
   Square getStart(){
     return start;
   }

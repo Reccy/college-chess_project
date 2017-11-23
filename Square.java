@@ -50,4 +50,9 @@ class Square{
   void print() {
       System.out.println("pieceName: " + pieceName + ", x: " + posX + ", y: " + posY);
   }
+
+    @Override
+    public String toString() {
+        return "pieceName: " + pieceName + ", x: " + posX + ", y: " + posY;
+    }
 }

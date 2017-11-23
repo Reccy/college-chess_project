@@ -282,14 +282,18 @@ public class ChessState {
 
             if ((agentName.contains("Black")) && (opponentLandingX == agentPosX && opponentLandingY == agentPosY)) {
                 System.out.println("WHITE PIECE UNDER ATTACK: " + agentPosX + ", " + agentPosY + " => " + piece.getName());
-                return 1;
+                return 0;
             }
         }
 
-        return 0;
+        return 1;
     }
 
     //region Move Finders
+
+    /**
+     * Returns a stack of all possible black moves
+     */
     private Stack<Move> getBlackMoves() {
         Stack<Square> blackSquares = getBlackSquares();
         Stack<Move> blackMoves = new Stack<>();
@@ -323,6 +327,9 @@ public class ChessState {
         return blackMoves;
     }
 
+    /**
+     * Returns a stack of all possible white moves
+     */
     private Stack<Move> getWhiteMoves() {
         Stack<Square> whiteSquares = getWhiteSquares();
         Stack<Move> whiteMoves = new Stack<>();
@@ -356,6 +363,57 @@ public class ChessState {
         return whiteMoves;
     }
 
+    /**
+     * Returns all possible pawn moves, changes team depending on the pieceName.
+     */
+    private Stack<Move> getPawnMoves(int posX, int posY, String pieceName) {
+        Stack<Move> possibleMoves = new Stack<>();
+        Square startingSquare = new Square(posX, posY, pieceName);
+        int forwardMovement = pieceName.contains("White") ? 1 : -1;
+        String thisTeamName = forwardMovement == 1 ? "Black" : "White";
+        int startingRow = forwardMovement == 1 ? 1 : 6;
+
+        if (posX > 0 && !chessSquare[posX - 1][posY + forwardMovement].getName().contains(thisTeamName)) {
+            possibleMoves.push(new Move(startingSquare, new Square(posX - 1, posY + forwardMovement)));
+        }
+
+        if (posX < 7 && !chessSquare[posX + 1][posY + forwardMovement].getName().contains(thisTeamName)) {
+            possibleMoves.push(new Move(startingSquare, new Square(posX + 1, posY + forwardMovement)));
+        }
+
+        if (!chessSquare[posX][posY + forwardMovement].getName().contains(thisTeamName)) {
+            possibleMoves.add(new Move(startingSquare, new Square(posX, posY + forwardMovement)));
+
+            System.out.println(startingRow + " -- " + startingSquare.getPosY());
+
+            if (startingSquare.getPosY() == startingRow && !chessSquare[posX][posY + (forwardMovement * 2)].getName().contains(thisTeamName)) {
+                possibleMoves.add(new Move(startingSquare, new Square(posX, posY + (forwardMovement * 2))));
+            }
+        }
+        System.out.println("MOVES: " + possibleMoves.toString());
+
+        return possibleMoves;
+    }
+
+    private Stack<Move> getKnightMoves(int posX, int posY, String pieceName) {
+        return new Stack<Move>();
+    }
+
+    private Stack<Move> getRookMoves(int posX, int posY, String pieceName) {
+        return new Stack<Move>();
+    }
+
+    private Stack<Move> getBishopMoves(int posX, int posY, String pieceName) {
+        return new Stack<Move>();
+    }
+
+    private Stack<Move> getQueenMoves(int posX, int posY, String pieceName) {
+        return new Stack<Move>();
+    }
+
+    private Stack<Move> getKingMoves(int posX, int posY, String pieceName) {
+        return new Stack<Move>();
+    }
 
     //endregion
 

@@ -40,7 +40,7 @@ class Square{
       } else if (pieceName.contains("Queen")) {
           return 8;
       } else if (pieceName.contains("King")) {
-          return 100;
+          return 500;
       }
 
       // Return 0 if null piece

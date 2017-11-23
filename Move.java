@@ -1,6 +1,7 @@
 class Move{
   private Square start;
   private Square landing;
+  private ChessState endState;
 
   Move(Square x, Square y){
     start = x;
@@ -22,5 +23,13 @@ class Move{
 
   Square getLanding(){
     return landing;
+  }
+
+  public void setEndState(ChessState endState) {
+    this.endState = endState;
+  }
+
+  public ChessState getEndState() {
+    return endState;
   }
 }

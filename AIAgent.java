@@ -24,14 +24,14 @@ class AIAgent {
      * the player's move. This has the disadvantage that the AI can easily fall into traps
      * set by the player.
      */
-    Move nextBestMove(Stack<Move> possibilities, ChessProject chessProject) {
+    Move nextBestMove(Stack<Move> possibilities, ChessState chessState) {
 
         // The current best move and evaluated function
         ArrayList<Move> bestMove = new ArrayList<>();
         int bestEvaluation = Integer.MIN_VALUE;
 
         // Create data representation of the Chess Project
-        ChessState initialChessState = new ChessState(chessProject);
+        ChessState initialChessState = new ChessState(chessState);
 
         // Print the current state
         initialChessState.printDataRepresentation("Current State");
@@ -43,6 +43,7 @@ class AIAgent {
             ChessState nextChessState = new ChessState(initialChessState);
 
             nextChessState.performMove(move);
+            move.setEndState(nextChessState);
             nextChessState.printDataRepresentation("Next Possible Move");
 
             // If the next move has a better evaluation result, then set that as the next best move
@@ -61,9 +62,9 @@ class AIAgent {
     }
 
     /**
-     * TODO: Description
+     * MinMax to look ahead two levels
      */
-    Move twoLevelsDeep(Stack<Move> possibilities, ChessProject chessProject) {
-        return nextBestMove(possibilities, chessProject);
+    Move twoLevelsDeep(Stack<Move> possibilities, ChessState chessState) {
+        return new Move();
     }
 }

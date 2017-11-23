@@ -266,7 +266,6 @@ public class ChessState {
         Stack<Move> opponentMoves = getBlackMoves();
         int agentPosX = piece.getPosX();
         int agentPosY = piece.getPosY();
-        String agentName = piece.getName();
 
         for (Move opponentMove : opponentMoves) {
             int opponentLandingX = opponentMove.getLanding().getPosX();
@@ -375,10 +374,6 @@ public class ChessState {
 
         if (!chessSquare[posX][posY + forwardMovement].getName().contains(thisTeamName)) {
             possibleMoves.push(new Move(startingSquare, chessSquare[posX][posY + forwardMovement]));
-
-            if ((posY + (forwardMovement * 2)) < 0) {
-                System.out.println("SOMETHING WENT SHITE");
-            }
 
             if (startingSquare.getPosY() == startingRow && !chessSquare[posX][posY + (forwardMovement * 2)].getName().contains(thisTeamName)) {
                 possibleMoves.push(new Move(startingSquare, chessSquare[posX][posY + (forwardMovement * 2)]));

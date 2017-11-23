@@ -919,15 +919,16 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
             // Make move depending on game mode
             Move selectedMove;
+            ChessState chessState = new ChessState(this);
             switch (gameMode) {
                 case RANDOM:
                     selectedMove = agent.randomMove(completeMoves);
                     break;
                 case NEXT_BEST_MOVE:
-                    selectedMove = agent.nextBestMove(completeMoves, this);
+                    selectedMove = agent.nextBestMove(completeMoves, chessState);
                     break;
                 case TWO_LEVELS_DEEP:
-                    selectedMove = agent.twoLevelsDeep(completeMoves, this);
+                    selectedMove = agent.twoLevelsDeep(completeMoves, chessState);
                     break;
                 default:
                     selectedMove = agent.randomMove(completeMoves);

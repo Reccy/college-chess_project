@@ -30,17 +30,17 @@ class Square{
   int getEvaluationValue() {
 
       if (pieceName.contains("Pawn")) {
-          return 1;
+          return 5;
       } else if (pieceName.contains("Knight")) {
-          return 3;
+          return 10;
       } else if (pieceName.contains("Rook")) {
-          return 5;
+          return 15;
       } else if (pieceName.contains("Bishop")) {
-          return 5;
+          return 15;
       } else if (pieceName.contains("Queen")) {
-          return 8;
+          return 30;
       } else if (pieceName.contains("King")) {
-          return 500;
+          return 1000;
       }
 
       // Return 0 if null piece

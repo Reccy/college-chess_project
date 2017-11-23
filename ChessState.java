@@ -218,15 +218,8 @@ public class ChessState {
      * Gets the attack advantage of the pawn piece
      */
     private int getAttackAdvantage(Stack<Move> availableMoves, String pieceName) {
-        String thisPieceTeam;
+        String thisPieceTeam = getTeamName(pieceName);
         int attackAdvantage = 0;
-
-        // Determine this piece's team
-        if (pieceName.contains("Black")) {
-            thisPieceTeam = "Black";
-        } else {
-            thisPieceTeam = "White";
-        }
 
         // Update evaluation for each move
         for (Move move : availableMoves) {
@@ -235,7 +228,7 @@ public class ChessState {
             String opponentPieceName = thisPieceTeam.equals("Black") ? "White" : "Black" ;
 
             if (chessSquare[pieceLandingX][pieceLandingY].getName().contains(opponentPieceName)) {
-                attackAdvantage += chessSquare[pieceLandingX][pieceLandingY].getEvaluationValue() * 0.75f;
+                attackAdvantage += chessSquare[pieceLandingX][pieceLandingY].getEvaluationValue() * 0.2;
             }
         }
 
@@ -248,26 +241,21 @@ public class ChessState {
      * Returns 0 if the piece is not under attack.
      */
     private int getUnderAttackMultiplierBlackPieces(Square piece) {
-        return 1;
-
-        /*
         Stack<Move> opponentMoves = getWhiteMoves();
         int agentPosX = piece.getPosX();
         int agentPosY = piece.getPosY();
-        String agentName = piece.getName();
 
         for (Move opponentMove : opponentMoves) {
             int opponentLandingX = opponentMove.getLanding().getPosX();
             int opponentLandingY = opponentMove.getLanding().getPosY();
 
-            if ((agentName.contains("White")) && (opponentLandingX == agentPosX && opponentLandingY == agentPosY)) {
+            if (opponentLandingX == agentPosX && opponentLandingY == agentPosY) {
                 System.out.println("BLACK PIECE UNDER ATTACK: " + agentPosX + ", " + agentPosY + " => " + piece.getName());
                 return 1;
             }
         }
 
         return 0;
-        */
     }
 
     /**
@@ -284,7 +272,7 @@ public class ChessState {
             int opponentLandingX = opponentMove.getLanding().getPosX();
             int opponentLandingY = opponentMove.getLanding().getPosY();
 
-            if ((agentName.contains("Black")) && (opponentLandingX == agentPosX && opponentLandingY == agentPosY)) {
+            if (opponentLandingX == agentPosX && opponentLandingY == agentPosY) {
                 System.out.println("WHITE PIECE UNDER ATTACK: " + agentPosX + ", " + agentPosY + " => " + piece.getName());
                 return 0;
             }
@@ -387,6 +375,10 @@ public class ChessState {
 
         if (!chessSquare[posX][posY + forwardMovement].getName().contains(thisTeamName)) {
             possibleMoves.push(new Move(startingSquare, chessSquare[posX][posY + forwardMovement]));
+
+            if ((posY + (forwardMovement * 2)) < 0) {
+                System.out.println("SOMETHING WENT SHITE");
+            }
 
             if (startingSquare.getPosY() == startingRow && !chessSquare[posX][posY + (forwardMovement * 2)].getName().contains(thisTeamName)) {
                 possibleMoves.push(new Move(startingSquare, chessSquare[posX][posY + (forwardMovement * 2)]));
@@ -585,7 +577,7 @@ public class ChessState {
     }
 
     private int getForwardMovement(String piece) {
-        return piece.contains("White") ? 1 : -1;
+        return piece.contains("Black") ? -1 : 1;
     }
 
     private String getTeamName(String piece) {
@@ -593,7 +585,7 @@ public class ChessState {
     }
 
     private int getStartingRow(String piece) {
-        return piece.contains("Black") ? 1 : 6;
+        return piece.contains("Black") ? 6 : 1;
     }
 
     //endregion

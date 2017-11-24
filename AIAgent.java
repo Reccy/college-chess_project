@@ -20,9 +20,7 @@ class AIAgent {
 
     /**
      * The method nextBestMove evaluates the board and chooses the move that will result in
-     * the best outcome in the next move. However, this strategy will not take into account
-     * the player's move. This has the disadvantage that the AI can easily fall into traps
-     * set by the player.
+     * the best outcome in the next move. (The worst outcome for the player)
      */
     Move nextBestMove(Stack<Move> possibilities, ChessState chessState) {
 
@@ -62,9 +60,51 @@ class AIAgent {
     }
 
     /**
+     * The method nextWorstMove evaluates the board and chooses the move that will result in
+     * the worst outcome in the next move. (The best outcome for the player)
+     */
+    Move nextWorstMove(Stack<Move> possibilities, ChessState chessState) {
+
+        // The current best move and evaluated function
+        ArrayList<Move> worstMove = new ArrayList<>();
+        int worstEvaluation = Integer.MAX_VALUE;
+
+        // Create data representation of the Chess Project
+        ChessState initialChessState = new ChessState(chessState);
+
+        // Print the current state
+        initialChessState.printDataRepresentation("Current State");
+
+        // Evaluate each possible move
+        for (Move move : possibilities) {
+
+            // Check the next move
+            ChessState nextChessState = new ChessState(initialChessState);
+
+            nextChessState.performMove(move);
+            move.setEndState(nextChessState);
+            nextChessState.printDataRepresentation("Next Possible Move");
+
+            // If the next move has a worse evaluation result, then set that as the next best move
+            int boardEvaluation = nextChessState.evaluateBoard();
+            if (boardEvaluation == worstEvaluation) {
+                worstMove.add(move);
+            } else if (boardEvaluation < worstEvaluation) {
+                worstMove.clear();
+                worstMove.add(move);
+                worstEvaluation = boardEvaluation;
+            }
+        }
+
+        // Return random worst move
+        return worstMove.get(rand.nextInt(Math.max(worstMove.size(), 1)));
+    }
+
+    /**
      * MinMax to look ahead two levels
      */
     Move twoLevelsDeep(Stack<Move> possibilities, ChessState chessState) {
+        //return negamax(possibilities, chessState, 0, 2);
         return new Move();
     }
 }

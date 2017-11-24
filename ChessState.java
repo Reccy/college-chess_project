@@ -162,7 +162,7 @@ public class ChessState {
         if (whiteKing != null)
         {
             Stack<Move> availableMoves = getKingMoves(whiteKing.getPosX(), whiteKing.getPosY(), whiteKing.getName());
-            evaluation += (whiteKing.getEvaluationValue() - availableMoves.size() - getAttackAdvantage(availableMoves, whiteKing.getName()))  * getUnderAttackMultiplier(whiteKing);
+            evaluation += (whiteKing.getEvaluationValue() + getAttackAdvantage(availableMoves, whiteKing.getName()))  * getUnderAttackMultiplier(whiteKing);
         }
 
         //endregion
@@ -206,7 +206,7 @@ public class ChessState {
         if (blackKing != null)
         {
             Stack<Move> availableMoves = getKingMoves(blackKing.getPosX(), blackKing.getPosY(), blackKing.getName());
-            evaluation -= (blackKing.getEvaluationValue() - availableMoves.size() - getAttackAdvantage(availableMoves, blackKing.getName())) * getUnderAttackMultiplier(blackKing);
+            evaluation -= (blackKing.getEvaluationValue() - getAttackAdvantage(availableMoves, blackKing.getName())) * getUnderAttackMultiplier(blackKing);
         }
 
         //endregion
@@ -263,7 +263,7 @@ public class ChessState {
 
             if (opponentLandingX == agentPosX && opponentLandingY == agentPosY) {
                 System.out.println("[" + teamAcronym + "] " + piece.getName() + "(" + agentPosX + ", " + agentPosY + ") UNDER ATTACK BY: " + opponentName + " (" + opponentStartingX + ",  " + opponentStartingY + ")");
-                return 0.5;
+                return 0.2;
             }
         }
 

@@ -104,7 +104,45 @@ class AIAgent {
      * MinMax to look ahead two levels
      */
     Move twoLevelsDeep(Stack<Move> possibilities, ChessState chessState) {
-        //return negamax(possibilities, chessState, 0, 2);
-        return new Move();
+        int bestMoveEval = Integer.MIN_VALUE;
+        Move bestMove = new Move();
+
+        for (Move move : possibilities) {
+            Stack<Move> in = new Stack<>();
+            in.push(move);
+            ChessState newState = new ChessState(chessState);
+            int moveEval = negamax(in, newState, 2, 1, true);
+
+            if (bestMoveEval < moveEval) {
+                bestMoveEval = moveEval;
+                bestMove = move;
+            }
+        }
+
+        return bestMove;
+    }
+
+    /**
+     * Negamax algorithm to return the next best possible move
+     */
+    int negamax(Stack<Move> possibilities, ChessState chessState, int maxDepth, int currentDepth, boolean isAgent) {
+        if(currentDepth == maxDepth) {
+            return chessState.evaluateBoard();
+        }
+
+        int max = Integer.MIN_VALUE;
+
+        for (Move move : possibilities) {
+            ChessState newState = new ChessState(chessState);
+            newState.performMove(move);
+            move.setEndState(newState);
+            int evaluation = isAgent ? negamax(chessState.getBlackMoves(), newState, maxDepth, currentDepth + 1, false) : negamax(chessState.getWhiteMoves(), newState, maxDepth, currentDepth + 1, true);
+
+            if (evaluation > max) {
+                max = evaluation;
+            }
+        }
+
+        return max;
     }
 }
